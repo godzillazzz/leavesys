@@ -36,12 +36,11 @@
             .rounded-2xl, .rounded-xl, .rounded-lg { border-radius: 0 !important; border: none !important; }
             .bg-white\/95, .bg-white\/50, .bg-white { background: transparent !important; }
             h3, h4, span, p, div { color: #000 !important; }
-            .text-indigo-600, .text-blue-700, .text-green-600, .text-red-500 { color: #000 !important; font-weight: normal !important; }
             table { width: 100% !important; border-collapse: collapse !important; margin-bottom: 20px !important; }
             th { border: 1px solid #000 !important; padding: 10px !important; background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: bold !important; text-align: center !important; }
-            td { border: 1px solid #000 !important; padding: 8px 10px !important; vertical-align: top; }
+            td { border: 1px solid #000 !important; padding: 10px !important; vertical-align: top; }
             tr { page-break-inside: avoid !important; }
-            .signature-box { page-break-inside: avoid !important; margin-top: 40px !important; }
+            .signature-box { page-break-inside: avoid !important; margin-top: 50px !important; }
         }
     </style>
 </head>
@@ -180,7 +179,7 @@
                             <p id="fileNameDisplay" class="text-xs text-indigo-600 mt-1 hidden"></p>
                         </div>
                     </div>
-                    <button type="submit" id="submitBtn" class="mt-6 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-lg shadow-lg flex justify-center items-center">
+                    <button type="submit" id="submitBtn" class="mt-6 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-lg shadow-lg flex justify-center items-center transition duration-200">
                         <span id="submitText">ส่งคำขอลางาน</span>
                         <div id="submitLoader" class="loader ml-3 hidden border-t-white"></div>
                     </button>
@@ -188,20 +187,20 @@
             </div>
 
             <div id="section-summary" class="hidden no-print">
-                <form id="summaryForm" onsubmit="fetchSummary(event)" class="mb-8">
-                    <div class="space-y-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ตรวจสอบวันลาคงเหลือรายบุคคล</label>
-                        <input type="text" id="searchName" placeholder="ระบุ ชื่อ-นามสกุล ของท่าน" required class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none bg-gray-50 text-center">
+                <form id="summaryForm" onsubmit="fetchSummary(event)" class="mb-8 bg-slate-50 p-4 rounded-xl border border-gray-200">
+                    <div class="w-full">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">ระบุชื่อ-นามสกุล</label>
+                        <input type="text" id="searchName" placeholder="ระบุ ชื่อ-นามสกุล ของท่าน" required class="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none bg-white text-sm">
                     </div>
-                    <button type="submit" id="searchBtn" class="mt-4 w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-lg transition shadow-md flex justify-center items-center">
-                        <span>ตรวจสอบข้อมูล</span>
+                    <button type="submit" id="searchBtn" class="mt-4 w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2.5 rounded-lg transition shadow-md flex justify-center items-center text-sm">
+                        <span>ตรวจสอบข้อมูลวันลาทั้งหมด</span>
                     </button>
                 </form>
 
                 <div id="summaryResult" class="hidden animate-fade-in">
                     <div class="flex justify-end mb-4">
                         <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg shadow transition flex items-center text-sm font-medium">
-                            <i class="fa-solid fa-print mr-2"></i> พิมพ์รายงานเสนอ
+                            <i class="fa-solid fa-print mr-2"></i> พิมพ์รายงานสรุปนี้
                         </button>
                     </div>
 
@@ -215,7 +214,7 @@
                                 <tr>
                                     <th class="px-4 py-3 border-b text-center">ประเภทการลา</th>
                                     <th class="px-4 py-3 border-b text-center">สิทธิ์ทั้งหมด (วัน)</th>
-                                    <th class="px-4 py-3 border-b text-center">ใช้ไป (วัน)</th>
+                                    <th class="px-4 py-3 border-b text-center">ใช้ไปทั้งหมด (วัน)</th>
                                     <th class="px-4 py-3 border-b text-center text-indigo-600">คงเหลือ (วัน)</th>
                                 </tr>
                             </thead>
@@ -234,7 +233,7 @@
                                 <tr>
                                     <th class="px-3 py-3 border-b text-center" width="25%">วันที่ลา</th>
                                     <th class="px-3 py-3 border-b text-center" width="55%">ประเภท / เหตุผลการลา</th>
-                                    <th class="px-3 py-3 border-b text-center" width="20%">สถานะ</th>
+                                    <th class="px-3 py-3 border-b text-center" width="20%">Sub-status</th>
                                 </tr>
                             </thead>
                             <tbody id="screenSummaryDetailBody" class="divide-y divide-gray-50"></tbody>
@@ -301,7 +300,7 @@
 
             <div id="globalPrintReport" class="print-only hidden">
                 <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold mb-1">รายงานสรุปข้อมูลการลางาน</h2>
+                    <h2 id="printReportTitle" class="text-2xl font-bold mb-1">ใบขออนุมัติลางาน</h2>
                     <p class="text-lg">พนักงานรักษาความปลอดภัย ส่วนปฏิบัติการระบบท่อเขต 11</p>
                     <div class="mt-4 text-left flex justify-between border-b-2 border-black pb-2">
                         <p class="font-bold">ชื่อพนักงาน: <span id="printEmpName" class="font-normal"></span></p>
@@ -309,391 +308,394 @@
                     </div>
                 </div>
 
-                <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white mb-6">
+                <div class="overflow-hidden bg-white mb-6">
                     <table class="w-full text-sm text-left border-collapse">
-                        <thead class="bg-gray-100 text-gray-700 font-bold">
+                        <thead>
                             <tr>
-                                <th class="px-4 py-3 border text-center">ประเภทการลา</th>
-                                <th class="px-4 py-3 border text-center">สิทธิ์ทั้งหมด (วัน)</th>
-                                <th class="px-4 py-3 border text-center">ใช้ไป (วัน)</th>
-                                <th class="px-4 py-3 border text-center text-indigo-600">คงเหลือ (วัน)</th>
+                                <th class="px-4 py-3 border text-center" width="30%">วันที่ลางาน</th>
+                                <th class="px-4 py-3 border text-center" width="20%">ประเภทการลา</th>
+                                <th class="px-4 py-3 border text-center" width="15%">จำนวนวัน</th>
+                                <th class="px-4 py-3 border text-center" width="35%">ผู้ปฏิบัติแทน / เหตุผลการลา</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr><td class="px-4 py-3 font-medium border">ลาป่วย</td><td id="print-qSick" class="text-center border">0</td><td id="print-uSick" class="text-center border">0</td><td id="print-rSick" class="text-center font-bold text-green-600 border">0</td></tr>
-                            <tr><td class="px-4 py-3 font-medium border">ลากิจ</td><td id="print-qPersonal" class="text-center border">0</td><td id="print-uPersonal" class="text-center border">0</td><td id="print-rPersonal" class="text-center font-bold text-green-600 border">0</td></tr>
-                            <tr><td class="px-4 py-3 font-medium border">ลาพักร้อน</td><td id="print-qVacation" class="text-center border">0</td><td id="print-uVacation" class="text-center border">0</td><td id="print-rVacation" class="text-center font-bold text-green-600 border">0</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h4 class="text-sm font-semibold text-gray-700 mb-2">รายละเอียดประวัติการลาทั้งหมด</h4>
-                <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white mb-8">
-                    <table class="w-full text-sm text-left border-collapse">
-                        <thead class="bg-slate-50 text-gray-600 font-bold">
-                            <tr>
-                                <th class="px-3 py-3 border text-center" width="25%">วันที่ลา</th>
-                                <th class="px-3 py-3 border text-center" width="55%">ประเภท / เหตุผลการลา</th>
-                                <th class="px-3 py-3 border text-center" width="20%">สถานะ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="printSummaryDetailBody" class="divide-y divide-gray-50"></tbody>
+                        <tbody id="printSingleRowBody"></tbody>
                     </table>
                 </div>
 
                 <div class="signature-box print-only hidden grid grid-cols-2 gap-10 text-center mt-12">
-                        <div class="space-y-5">
-                            <p>ลงชื่อ...........................................................</p>
-                            <p>(...........................................................)</p>
-                            <p>พนักงานผู้ทำสรุปข้อมูล</p>
-                        </div>
+                    <div class="space-y-5">
+                        <p>ลงชื่อ...........................................................</p>
+                        <p>(...........................................................)</p>
+                        <p>พนักงานผู้จัดพิมพ์รายงาน/หัวหน้าพนักงานรักษาความปลอดภัย</p>
+                    </div>
                 <div class="signature-box print-only hidden grid grid-cols-2 gap-10 text-center mt-12">
-                        <div class="space-y-5">
-                            <p>ทราบ / ลงชื่อ...........................................................</p>
-                            <p>(...........................................................)</p>
-                            <p>ผู้จัดการเขต</p>
-                        </div>
-                      </div>
+                    <div class="space-y-5">
+                        <p>ทราบ / ลงชื่อ...........................................................</p>
+                        <p>(...........................................................)</p>
+                        <p>ผู้จัดการเขต (ผู้อนุมัติ)</p>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
     <script>
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhqKbhBPO1phmRWoMgWAsIuwVntETdF63dCIHc1QxMRRC06AF_FoGceQRUwLGcIli-/exec"; 
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzxa96yFF3C9FMbqHieNsZCT_uWzhOI8X21r6j4OxU_HSCT4nI6jca6xNL0xmHUF3wq/exec"; 
 
-        async function callGAS(action, payload = {}) {
+        let localHistoryList = []; 
+
+        async function callGAS(action, payload = {}) { 
+            try { 
+                const response = await fetch(GAS_WEB_APP_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: action, payload: payload }) 
+                }); 
+                return await response.json(); 
+            } catch (error) { 
+                console.error("API Error:", error); 
+                throw error; 
+            } 
+        } 
+
+        function switchTab(tab) { 
+            const userSections = ['form', 'summary', 'list']; 
+            userSections.forEach(s => { 
+                const el = document.getElementById(`section-${s}`); 
+                const tabEl = document.getElementById(`tab-${s}`); 
+                if (s === tab) { 
+                    el.classList.remove('hidden'); 
+                    el.classList.add('animate-fade-in', 'block'); 
+                    tabEl.className = "w-1/3 py-3.5 tab-active transition-all duration-300"; 
+                    if(tab === 'list') loadLeaveHistory();  
+                } else { 
+                    el.classList.add('hidden'); 
+                    el.classList.remove('animate-fade-in', 'block'); 
+                    tabEl.className = "w-1/3 py-3.5 tab-inactive transition-all duration-300"; 
+                } 
+            }); 
+            document.getElementById('section-admin-login').classList.add('hidden'); 
+            document.getElementById('section-admin-dashboard').classList.add('hidden'); 
+            document.getElementById('userTabs').classList.remove('hidden'); 
+             
+            if (tab !== 'summary') { 
+                document.getElementById('summaryResult').classList.add('hidden'); 
+            } 
+        } 
+
+        function updateFileName(input) { 
+            const display = document.getElementById('fileNameDisplay'); 
+            if(input.files[0]) { 
+                display.innerText = "ไฟล์ที่เลือก: " + input.files[0].name; 
+                display.classList.remove('hidden'); 
+            } 
+        } 
+
+        /* ==========================================================
+           🛡️ ระบบตรวจสอบโควตาวันลาคงเหลือที่หน้าฟอร์ม (Client-Side Validation)
+           ========================================================== */
+        function getRequestedDays() {
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            if (!start || !end) return 0;
+            
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const diffTime = endDate - startDate;
+            if (diffTime < 0) return -1; 
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        }
+
+        async function validateQuotaOnForm() {
+            const name = document.getElementById('name').value;
+            const leaveType = document.getElementById('leaveType').value;
+            const days = getRequestedDays();
+            
+            if (!name || !leaveType || days <= 0) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+
             try {
-                const response = await fetch(GAS_WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: action, payload: payload })
-                });
-                return await response.json();
-            } catch (error) {
-                console.error("API Error:", error);
-                throw error;
-            }
-        }
+                // ส่ง 'all' ไปที่ month เพื่อดึงภาพรวมมาเช็ค Real-time สิทธิ์คงเหลือหลักทั้งหมด
+                const res = await callGAS('getLeaveSummary', { name: name, month: 'all', year: '' });
+                if (res.error) return;
 
-        function switchTab(tab) {
-            const userSections = ['form', 'summary', 'list'];
-            userSections.forEach(s => {
-                const el = document.getElementById(`section-${s}`);
-                const tabEl = document.getElementById(`tab-${s}`);
-                if (s === tab) {
-                    el.classList.remove('hidden');
-                    el.classList.add('animate-fade-in', 'block');
-                    tabEl.className = "w-1/3 py-3.5 tab-active transition-all duration-300";
-                    if(tab === 'list') loadLeaveHistory(); 
-                } else {
-                    el.classList.add('hidden');
-                    el.classList.remove('animate-fade-in', 'block');
-                    tabEl.className = "w-1/3 py-3.5 tab-inactive transition-all duration-300";
-                }
-            });
-            document.getElementById('section-admin-login').classList.add('hidden');
-            document.getElementById('section-admin-dashboard').classList.add('hidden');
-            document.getElementById('userTabs').classList.remove('hidden');
-            
-            if (tab !== 'summary') {
-                document.getElementById('summaryResult').classList.add('hidden');
-            }
-        }
+                let remaining = 0;
+                if (leaveType === "ลาป่วย") remaining = res.remaining.sick;
+                else if (leaveType === "ลากิจ") remaining = res.remaining.personal;
+                else if (leaveType === "ลาพักร้อน") remaining = res.remaining.vacation;
 
-        function updateFileName(input) {
-            const display = document.getElementById('fileNameDisplay');
-            if(input.files[0]) {
-                display.innerText = "ไฟล์ที่เลือก: " + input.files[0].name;
-                display.classList.remove('hidden');
-            }
-        }
-
-        function submitForm(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const text = document.getElementById('submitText');
-            const loader = document.getElementById('submitLoader');
-            
-            const data = {
-                name: document.getElementById('name').value,
-                department: document.getElementById('department').value,
-                leaveType: document.getElementById('leaveType').value,
-                startDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value,
-                reason: document.getElementById('reason').value
-            };
-
-            btn.disabled = true; text.innerText = "กำลังส่งข้อมูล..."; loader.classList.remove('hidden');
-
-            const file = document.getElementById('attachment').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    data.fileName = file.name;
-                    data.mimeType = file.type;
-                    data.fileBase64 = ev.target.result.split(',')[1];
-                    callGAS('saveLeaveRequest', data).then(formSuccess).catch(formError);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                callGAS('saveLeaveRequest', data).then(formSuccess).catch(formError);
-            }
-        }
-
-        function formSuccess(res) {
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = false;
-            document.getElementById('submitText').innerText = "ส่งคำขอลางาน";
-            document.getElementById('submitLoader').classList.add('hidden');
-            if(res.status === "success") {
-                Swal.fire('สำเร็จ!', 'ส่งใบลาเรียบร้อยแล้ว', 'success');
-                document.getElementById('leaveForm').reset();
-                document.getElementById('fileNameDisplay').classList.add('hidden');
-            } else {
-                Swal.fire('ผิดพลาด', res.message, 'error');
-            }
-        }
-
-        function formError(err) {
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitText').innerText = "ส่งคำขอลางาน";
-            document.getElementById('submitLoader').classList.add('hidden');
-            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error');
-        }
-
-        // ฟังก์ชันแจกจ่ายและ Render ข้อมูลลง DOM ทั้งบนหน้าจอแสดงผล และหน้าฟอร์มสำหรับสั่งพิมพ์แยกกันอย่างชัดเจน
-        function populateDataToDOM(name, data) {
-            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-            
-            // 1. ผูกข้อมูลลงฝั่งรายงานพิมพ์ส่วนกลาง (Global Print Layout)
-            document.getElementById('printEmpName').innerText = name;
-            document.getElementById('printDate').innerText = today;
-
-            document.getElementById('print-qSick').innerText = data.quota.sick;
-            document.getElementById('print-uSick').innerText = data.used["ลาป่วย"] || 0;
-            document.getElementById('print-rSick').innerText = data.remaining.sick;
-
-            document.getElementById('print-qPersonal').innerText = data.quota.personal;
-            document.getElementById('print-uPersonal').innerText = data.used["ลากิจ"] || 0;
-            document.getElementById('print-rPersonal').innerText = data.remaining.personal;
-
-            document.getElementById('print-qVacation').innerText = data.quota.vacation;
-            document.getElementById('print-uVacation').innerText = data.used["ลาพักร้อน"] || 0;
-            document.getElementById('print-rVacation').innerText = data.remaining.vacation;
-
-            // 2. ผูกข้อมูลลงฝั่งหน้าจอแสดงผลแอปปกติ (Screen UI - Tab Summary)
-            const resEmpNameEl = document.getElementById('resEmpName');
-            if(resEmpNameEl) resEmpNameEl.innerText = name;
-
-            const updateScreenText = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
-            updateScreenText('screen-qSick', data.quota.sick);
-            updateScreenText('screen-uSick', data.used["ลาป่วย"] || 0);
-            updateScreenText('screen-rSick', data.remaining.sick);
-
-            updateScreenText('screen-qPersonal', data.quota.personal);
-            updateScreenText('screen-uPersonal', data.used["ลากิจ"] || 0);
-            updateScreenText('screen-rPersonal', data.remaining.personal);
-
-            updateScreenText('screen-qVacation', data.quota.vacation);
-            updateScreenText('screen-uVacation', data.used["ลาพักร้อน"] || 0);
-            updateScreenText('screen-rVacation', data.remaining.vacation);
-
-            // 3. จัดการโครงสร้างประวัติตารางย่อยในรายงาน
-            let printDetailHtml = '';
-            let screenDetailHtml = '';
-
-            if (!data.details || data.details.length === 0) {
-                const noDataRow = '<tr><td colspan="3" class="text-center py-4 text-gray-500">ไม่พบประวัติการลา</td></tr>';
-                printDetailHtml = noDataRow;
-                screenDetailHtml = noDataRow;
-            } else {
-                data.details.forEach(item => {
-                    let statusColor = item.status === 'อนุมัติ' ? 'text-green-600' : (item.status === 'ไม่อนุมัติ' ? 'text-red-500' : 'text-yellow-600');
+                if (remaining < days) {
+                    Swal.fire('วันลาไม่เพียงพอ', `คุณเลือกตารางลาจำนวน ${days} วัน แต่โควตาคงเหลือของท่านปัจจุบันมีเพียง ${remaining} วัน เท่านั้น`, 'warning');
                     
-                    // สำหรับหน้าพิมพ์ (บังคับขอบตารางเส้นทึบคมชัด)
-                    printDetailHtml += `
-                        <tr>
-                            <td class="px-3 py-2 border text-center">
-                                <span class="font-medium">${item.date}</span><br>
-                                <span class="text-xs text-gray-500">(${item.days} วัน)</span>
-                            </td>
-                            <td class="px-3 py-2 border">
-                                <span class="font-semibold text-indigo-600">[${item.type}]</span> ${item.reason}
-                            </td>
-                            <td class="px-3 py-2 border text-center font-medium ${statusColor}">
-                                ${item.status}
-                            </td>
-                        </tr>`;
-
-                    // สำหรับหน้าจอแอปปกติ (ดีไซน์สไตล์ Tailwind คลีนๆ)
-                    screenDetailHtml += `
-                        <tr>
-                            <td class="px-3 py-2 border-b text-center">
-                                <span class="font-medium">${item.date}</span><br>
-                                <span class="text-xs text-gray-500">(${item.days} วัน)</span>
-                            </td>
-                            <td class="px-3 py-2 border-b">
-                                <span class="font-semibold text-indigo-600">[${item.type}]</span> ${item.reason}
-                            </td>
-                            <td class="px-3 py-2 border-b text-center font-medium ${statusColor}">
-                                ${item.status}
-                            </td>
-                        </tr>`;
-                });
+                    submitBtn.disabled = true;
+                    submitBtn.className = "mt-6 w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white font-semibold py-3 rounded-lg shadow-lg flex justify-center items-center cursor-not-allowed";
+                    submitText.innerText = "วันลาคงเหลือไม่พอ ไม่สามารถส่งได้";
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.className = "mt-6 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-lg shadow-lg flex justify-center items-center transition duration-200";
+                    submitText.innerText = "ส่งคำขอลางาน";
+                }
+            } catch (err) {
+                console.error("ไม่สามารถเชื่อมต่อเพื่อเช็คโควตาคงเหลือได้:", err);
             }
-            
-            document.getElementById('printSummaryDetailBody').innerHTML = printDetailHtml;
-            const screenBody = document.getElementById('screenSummaryDetailBody');
-            if(screenBody) screenBody.innerHTML = screenDetailHtml;
         }
 
-        function fetchSummary(e) {
-            e.preventDefault();
-            const name = document.getElementById('searchName').value;
-            const btn = document.getElementById('searchBtn');
-            const resultBox = document.getElementById('summaryResult');
-            
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loader mx-auto border-t-white"></div>';
+        document.getElementById('name').addEventListener('change', validateQuotaOnForm);
+        document.getElementById('leaveType').addEventListener('change', validateQuotaOnForm);
+        document.getElementById('startDate').addEventListener('change', validateQuotaOnForm);
+        document.getElementById('endDate').addEventListener('change', validateQuotaOnForm);
 
-            callGAS('getLeaveSummary', { name }).then((data) => {
-                btn.disabled = false;
-                btn.innerText = "ตรวจสอบข้อมูล";
-                
-                if (data.error) {
-                    Swal.fire('ไม่พบข้อมูล', data.error, 'warning');
-                    resultBox.classList.add('hidden');
-                    return;
-                }
+        function submitForm(e) { 
+            e.preventDefault(); 
+            const btn = document.getElementById('submitBtn'); 
+            const text = document.getElementById('submitText'); 
+            const loader = document.getElementById('submitLoader'); 
+             
+            const data = { 
+                name: document.getElementById('name').value, 
+                department: document.getElementById('department').value, 
+                leaveType: document.getElementById('leaveType').value, 
+                startDate: document.getElementById('startDate').value, 
+                endDate: document.getElementById('endDate').value, 
+                reason: document.getElementById('reason').value 
+            }; 
 
-                populateDataToDOM(name, data);
-                resultBox.classList.remove('hidden');
-            }).catch(() => {
-                btn.disabled = false;
-                btn.innerText = "ตรวจสอบข้อมูล";
-                Swal.fire('ข้อผิดพลาด', 'ดึงข้อมูลล้มเหลว', 'error');
-            });
-        }
+            btn.disabled = true; text.innerText = "กำลังส่งข้อมูล..."; loader.classList.remove('hidden'); 
 
-        function loadLeaveHistory() {
-            const tbody = document.getElementById('leaveTableBody');
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400"><div class="loader mx-auto border-t-indigo-600"></div></td></tr>';
-            
-            callGAS('getAllLeaveHistory').then((historyList) => {
-                let html = '';
-                if(historyList.length === 0) {
-                    html = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ไม่พบข้อมูลประวัติการลา</td></tr>';
-                } else {
-                    historyList.forEach((item, index) => {
-                        let isApproved = item.status === 'อนุมัติ';
-                        let statusColor = isApproved ? 'bg-green-100 text-green-800' : (item.status === 'ไม่อนุมัติ' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800');
-                        
-                        let printButton = isApproved 
-                            ? `<button onclick="printFromHistory('${item.name.replace(/'/g, "\\'")}', this)" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs transition flex items-center justify-center mx-auto shadow-sm"><i class="fa-solid fa-print mr-1"></i> พิมพ์</button>`
-                            : `<button disabled class="bg-gray-200 text-gray-400 px-2 py-1 rounded text-xs cursor-not-allowed mx-auto flex items-center justify-center"><i class="fa-solid fa-print mr-1"></i> พิมพ์</button>`;
+            const file = document.getElementById('attachment').files[0]; 
+            if (file) { 
+                const reader = new FileReader(); 
+                reader.onload = (ev) => { 
+                    data.fileName = file.name; 
+                    data.mimeType = file.type; 
+                    data.fileBase64 = ev.target.result.split(',')[1]; 
+                    callGAS('saveLeaveRequest', data).then(formSuccess).catch(formError); 
+                }; 
+                reader.readAsDataURL(file); 
+            } else { 
+                callGAS('saveLeaveRequest', data).then(formSuccess).catch(formError); 
+            } 
+        } 
 
-                        html += `
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 border-b font-medium text-gray-900">${item.name}</td>
-                                <td class="px-4 py-3 border-b text-xs text-gray-600">
-                                    <span class="font-semibold text-indigo-600 block text-sm">${item.type}</span>
-                                    ${item.date} (${item.days} วัน)
-                                </td>
-                                <td class="px-4 py-3 border-b text-center">
-                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusColor}">${item.status}</span>
-                                </td>
-                                <td class="px-4 py-3 border-b text-center">
-                                    ${printButton}
-                                </td>
-                            </tr>`;
-                    });
-                }
-                tbody.innerHTML = html;
-            });
-        }
+        function formSuccess(res) { 
+            const btn = document.getElementById('submitBtn'); 
+            btn.disabled = false; 
+            document.getElementById('submitText').innerText = "ส่งคำขอลางาน"; 
+            document.getElementById('submitLoader').classList.add('hidden'); 
+            if(res.status === "success") { 
+                Swal.fire('สำเร็จ!', 'ส่งใบลาเรียบร้อยแล้ว', 'success'); 
+                document.getElementById('leaveForm').reset(); 
+                document.getElementById('fileNameDisplay').classList.add('hidden'); 
+            } else { 
+                Swal.fire('ปฏิเสธการบันทึกข้อมูล', res.message, 'error'); 
+            } 
+        } 
 
-        function printFromHistory(employeeName, buttonElement) {
-            const originalContent = buttonElement.innerHTML;
-            buttonElement.disabled = true;
-            buttonElement.innerHTML = '<div class="loader w-3 h-3 border-2 border-t-transparent border-white mx-auto"></div>';
+        function formError(err) { 
+            document.getElementById('submitBtn').disabled = false; 
+            document.getElementById('submitText').innerText = "ส่งคำขอลางาน"; 
+            document.getElementById('submitLoader').classList.add('hidden'); 
+            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error'); 
+        } 
 
-            callGAS('getLeaveSummary', { name: employeeName }).then((data) => {
-                buttonElement.disabled = false;
-                buttonElement.innerHTML = originalContent;
+        function loadLeaveHistory() { 
+            const tbody = document.getElementById('leaveTableBody'); 
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400"><div class="loader mx-auto border-t-indigo-600"></div></td></tr>'; 
+             
+            callGAS('getAllLeaveHistory').then((historyList) => { 
+                localHistoryList = historyList; 
+                let html = ''; 
+                if(historyList.length === 0) { 
+                    html = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ไม่พบข้อมูลประวัติการลา</td></tr>'; 
+                } else { 
+                    historyList.forEach((item, index) => { 
+                        let isApproved = item.status === 'อนุมัติ'; 
+                        let statusColor = isApproved ? 'bg-green-100 text-green-800' : (item.status === 'ไม่อนุมัติ' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'); 
+                         
+                        let printButton = isApproved  
+                            ? `<button onclick="printFromHistory(${index}, this)" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs transition flex items-center justify-center mx-auto shadow-sm"><i class="fa-solid fa-print mr-1"></i> พิมพ์</button>` 
+                            : `<button disabled class="bg-gray-200 text-gray-400 px-2 py-1 rounded text-xs cursor-not-allowed mx-auto flex items-center justify-center"><i class="fa-solid fa-print mr-1"></i> พิมพ์</button>`; 
 
-                if (data.error) {
-                    Swal.fire('ไม่พบข้อมูล', 'ไม่สามารถดึงข้อมูลสรุปวันลาเพื่อจัดพิมพ์รายงานได้', 'warning');
-                    return;
-                }
+                        html += ` 
+                            <tr class="hover:bg-gray-50"> 
+                                <td class="px-4 py-3 border-b font-medium text-gray-900">${item.name}</td> 
+                                <td class="px-4 py-3 border-b text-xs text-gray-600"> 
+                                    <span class="font-semibold text-indigo-600 block text-sm">${item.type}</span> 
+                                    ${item.date} (${item.days} วัน) 
+                                </td> 
+                                <td class="px-4 py-3 border-b text-center"> 
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusColor}">${item.status}</span> 
+                                </td> 
+                                <td class="px-4 py-3 border-b text-center"> 
+                                    ${printButton} 
+                                </td> 
+                            </tr>`; 
+                    }); 
+                } 
+                tbody.innerHTML = html; 
+            }); 
+        } 
 
-                // นำส่งข้อมูลเข้าสู่สถาปัตยกรรมตัวพิมพ์รายงานส่วนกลาง
-                populateDataToDOM(employeeName, data);
+        function printFromHistory(index, buttonElement) { 
+            const item = localHistoryList[index]; 
+            if (!item) return; 
 
-                // สั่งเปิดชุดคำสั่ง Print ของ Browser ทันที
-                window.print();
-            }).catch(() => {
-                buttonElement.disabled = false;
-                buttonElement.innerHTML = originalContent;
-                Swal.fire('ข้อผิดพลาด', 'เกิดความล้มเหลวในการเตรียมข้อมูลรายงานเสนอ', 'error');
-            });
-        }
+            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }); 
+             
+            document.getElementById('printEmpName').innerText = item.name; 
+            document.getElementById('printDate').innerText = today; 
+            document.getElementById('printReportTitle').innerText = "ใบขออนุมัติลางาน"; 
 
-        function openAdminLogin() {
-            ['section-form', 'section-summary', 'section-list', 'section-admin-dashboard'].forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById('section-admin-login').classList.remove('hidden');
-            document.getElementById('userTabs').classList.add('hidden');
-        }
+            const singleRowHtml = ` 
+                <tr> 
+                    <td class="px-4 py-3 border text-center font-medium">${item.date}</td> 
+                    <td class="px-4 py-3 border text-center text-indigo-700 font-semibold">${item.type}</td> 
+                    <td class="px-4 py-3 border text-center">${item.days} วัน</td> 
+                    <td class="px-4 py-3 border text-left text-gray-700">ได้รับอนุมัติในระบบเรียบร้อยแล้ว</td> 
+                </tr> 
+            `; 
+             
+            document.getElementById('printSingleRowBody').innerHTML = singleRowHtml; 
+            window.print(); 
+        } 
 
-        function closeAdmin() {
-            switchTab('form');
-        }
+        function populateDataToDOM(name, data) { 
+            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }); 
+            document.getElementById('printEmpName').innerText = name; 
+            document.getElementById('printDate').innerText = today; 
+            document.getElementById('printReportTitle').innerText = "รายงานสรุปข้อมูลการลางาน"; 
 
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            
-            callGAS('verifyAdmin', { user, pass }).then((res) => {
-                if(res.success) {
-                    document.getElementById('section-admin-login').classList.add('hidden');
-                    document.getElementById('section-admin-dashboard').classList.remove('hidden');
-                    loadPendingRequests();
-                } else {
-                    Swal.fire('ข้อผิดพลาด', 'Username หรือ Password ไม่ถูกต้อง', 'error');
-                }
-            });
-        }
+            const updateScreenText = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; }; 
+            updateScreenText('screen-qSick', data.quota.sick); 
+            updateScreenText('screen-uSick', data.used["ลาป่วย"] || 0); 
+            updateScreenText('screen-rSick', data.remaining.sick); 
+            updateScreenText('screen-qPersonal', data.quota.personal); 
+            updateScreenText('screen-uPersonal', data.used["ลากิจ"] || 0); 
+            updateScreenText('screen-rPersonal', data.remaining.personal); 
+            updateScreenText('screen-qVacation', data.quota.vacation); 
+            updateScreenText('screen-uVacation', data.used["ลาพักร้อน"] || 0); 
+            updateScreenText('screen-rVacation', data.remaining.vacation); 
 
-        function loadPendingRequests() {
-            const tbody = document.getElementById('pendingTableBody');
-            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-400">กำลังโหลดรายการ...</td></tr>';
-            
-            callGAS('getPendingRequests').then((pendingList) => {
-                let html = '';
-                if(pendingList.length === 0) {
-                    html = '<tr><td colspan="3" class="text-center py-4 text-gray-500">ไม่มีรายการค้างพิจารณา</td></tr>';
-                } else {
-                    pendingList.forEach(item => {
-                        html += `
-                            <tr class="hover:bg-gray-50 text-xs md:text-sm">
-                                <td class="px-4 py-3 border-b font-medium">${item.name}<br><span class="text-xs text-gray-400">${item.department}</span></td>
-                                <td class="px-4 py-3 border-b">
-                                    <span class="font-bold text-indigo-600">[${item.type}]</span> ${item.date} (${item.days} วัน)<br>
-                                    <span class="text-gray-600">แทน: ${item.reason}</span>
-                                    ${item.fileUrl ? `<br><a href="${item.fileUrl}" target="_blank" class="text-blue-600 hover:underline"><i class="fa-solid fa-paperclip"></i> ดูไฟล์แนบ</a>` : ''}
-                                </td>
-                                <td class="px-4 py-3 border-b text-center space-y-1 md:space-y-0 md:space-x-1 whitespace-nowrap">
-                                    <button onclick="updateStatus('${item.id}', 'อนุมัติ')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs transition"><i class="fa-solid fa-check"></i></button>
-                                    <button onclick="updateStatus('${item.id}', 'ไม่อนุมัติ')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition"><i class="fa-solid fa-xmark"></i></button>
-                                </td>
-                            </tr>`;
-                    });
-                }
-                tbody.innerHTML = html;
-            });
-        }
+            const resEmpNameEl = document.getElementById('resEmpName'); 
+            if(resEmpNameEl) resEmpNameEl.innerText = name; 
 
-        function updateStatus(requestId, status) {
-            Swal.fire({
+            let screenDetailHtml = ''; 
+            let printDetailHtml = ''; 
+
+            if (!data.details || data.details.length === 0) { 
+                const noDataRow = '<tr><td colspan="4" class="text-center py-4 text-gray-500">ไม่พบประวัติการลาในระบบ</td></tr>'; 
+                screenDetailHtml = noDataRow; 
+                printDetailHtml = noDataRow; 
+            } else { 
+                data.details.forEach(item => { 
+                    let statusColor = item.status === 'อนุมัติ' ? 'text-green-600' : (item.status === 'ไม่อนุมัติ' ? 'text-red-500' : 'text-yellow-600'); 
+                    screenDetailHtml += ` 
+                        <tr> 
+                            <td class="px-3 py-2 border-b text-center"><span class="font-medium">${item.date}</span><br><span class="text-xs text-gray-500">(${item.days} วัน)</span></td> 
+                            <td class="px-3 py-2 border-b"><span class="font-semibold text-indigo-600">[${item.type}]</span> ${item.reason}</td> 
+                            <td class="px-3 py-2 border-b text-center font-medium ${statusColor}">${item.status}</td> 
+                        </tr>`; 
+                    printDetailHtml += ` 
+                        <tr> 
+                            <td class="px-4 py-3 border text-center font-medium">${item.date}</td> 
+                            <td class="px-4 py-3 border text-center text-indigo-700 font-semibold">${item.type}</td> 
+                            <td class="px-4 py-3 border text-center">${item.days} วัน</td> 
+                            <td class="px-4 py-3 border text-left">${item.reason}</td> 
+                        </tr>`; 
+                }); 
+            } 
+            const screenBody = document.getElementById('screenSummaryDetailBody'); 
+            if(screenBody) screenBody.innerHTML = screenDetailHtml; 
+            document.getElementById('printSingleRowBody').innerHTML = printDetailHtml; 
+        } 
+
+        /* ==========================================================
+           📊 ฟังก์ชันค้นหาสรุป (ปรับการส่ง Payload ข้ามตัวแปรเดือนและปี)
+           ========================================================== */
+        function fetchSummary(e) { 
+            e.preventDefault(); 
+            const name = document.getElementById('searchName').value; 
+            const btn = document.getElementById('searchBtn'); 
+            const resultBox = document.getElementById('summaryResult'); 
+             
+            btn.disabled = true; 
+            btn.innerHTML = '<div class="loader mx-auto border-t-white"></div>'; 
+
+            // ปรับส่งข้อมูลเดือนเป็น 'all' และปีเป็นค่าว่าง เพื่อดึงสิทธิ์คงเหลือภาพรวมสะสมทั้งหมดของปี
+            callGAS('getLeaveSummary', { name: name, month: 'all', year: '' }).then((data) => { 
+                btn.disabled = false; 
+                btn.innerText = "ตรวจสอบข้อมูลวันลาทั้งหมด"; 
+                if (data.error) { 
+                    Swal.fire('ไม่พบข้อมูล', data.error, 'warning'); 
+                    resultBox.classList.add('hidden'); 
+                    return; 
+                } 
+                populateDataToDOM(name, data); 
+                resultBox.classList.remove('hidden'); 
+            }).catch(() => { 
+                btn.disabled = false; 
+                btn.innerText = "ตรวจสอบข้อมูลวันลาทั้งหมด"; 
+                Swal.fire('ข้อผิดพลาด', 'ดึงข้อมูลล้มเหลว', 'error'); 
+            }); 
+        } 
+
+        function openAdminLogin() { 
+            ['section-form', 'section-summary', 'section-list', 'section-admin-dashboard'].forEach(s => document.getElementById(s).classList.add('hidden')); 
+            document.getElementById('section-admin-login').classList.remove('hidden'); 
+            document.getElementById('userTabs').classList.add('hidden'); 
+        } 
+
+        function closeAdmin() { 
+            switchTab('form'); 
+        } 
+
+        function handleAdminLogin(e) { 
+            e.preventDefault(); 
+            const user = document.getElementById('adminUser').value; 
+            const pass = document.getElementById('adminPass').value; 
+            callGAS('verifyAdmin', { user, pass }).then((res) => { 
+                if(res.success) { 
+                    document.getElementById('section-admin-login').classList.add('hidden'); 
+                    document.getElementById('section-admin-dashboard').classList.remove('hidden'); 
+                    loadPendingRequests(); 
+                } else { 
+                    Swal.fire('ข้อผิดพลาด', 'Username หรือ Password ไม่ถูกต้อง', 'error'); 
+                } 
+            }); 
+        } 
+
+        function loadPendingRequests() { 
+            const tbody = document.getElementById('pendingTableBody'); 
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-400">กำลังโหลดรายการ...</td></tr>'; 
+            callGAS('getPendingRequests').then((pendingList) => { 
+                let html = ''; 
+                if(pendingList.length === 0) { 
+                    html = '<tr><td colspan="3" class="text-center py-4 text-gray-500">ไม่มีรายการค้างพิจารณา</td></tr>'; 
+                } else { 
+                    pendingList.forEach(item => { 
+                        html += ` 
+                            <tr class="hover:bg-gray-50 text-xs md:text-sm"> 
+                                <td class="px-4 py-3 border-b font-medium">${item.name}<br><span class="text-xs text-gray-400">${item.department}</span></td> 
+                                <td class="px-4 py-3 border-b"> 
+                                    <span class="font-bold text-indigo-600">[${item.type}]</span> ${item.date} (${item.days} วัน)<br> 
+                                    <span class="text-gray-600">แทน: ${item.reason}</span> 
+                                    ${item.fileUrl ? `<br><a href="${item.fileUrl}" target="_blank" class="text-blue-600 hover:underline"><i class="fa-solid fa-paperclip"></i> ดูไฟล์แนบ</a>` : ''} 
+                                </td> 
+                                <td class="px-4 py-3 border-b text-center space-y-1 md:space-y-0 md:space-x-1 whitespace-nowrap"> 
+                                    <button onclick="updateStatus('${item.id}', 'อนุมัติ')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs transition"><i class="fa-solid fa-check"></i></button> 
+                                    <button onclick="updateStatus('${item.id}', 'ไม่อนุมัติ')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition"><i class="fa-solid fa-xmark"></i></button> 
+                                </td> 
+                            </tr>`; 
+                    }); 
+                } 
+                tbody.innerHTML = html; 
+            }); 
+        } 
+
+        function updateStatus(requestId, status) { 
+            Swal.fire({ 
                 title: 'ยืนยันการทำรายการ?',
                 text: `คุณต้องการปรับสถานะเป็น "${status}" ใช่หรือไม่?`,
                 icon: 'question',
@@ -701,19 +703,19 @@
                 confirmButtonColor: status === 'อนุมัติ' ? '#16a34a' : '#dc2626',
                 confirmButtonText: 'ยืนยัน',
                 cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    callGAS('changeRequestStatus', { requestId, status }).then((res) => {
-                        if(res.status === "success") {
+            }).then((result) => { 
+                if (result.isConfirmed) { 
+                    callGAS('changeRequestStatus', { requestId, status }).then((res) => { 
+                        if(res.status === "success") { 
                             Swal.fire('สำเร็จ', 'อัปเดตสถานะใบลาเรียบร้อย', 'success');
                             loadPendingRequests();
-                        } else {
-                            Swal.fire('ผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้', 'error');
-                        }
-                    });
-                }
-            });
-        }
+                        } else { 
+                            Swal.fire('ปฏิเสธการทำรายการ', res.message || 'ไม่สามารถบันทึกข้อมูลได้', 'error'); 
+                        } 
+                    }); 
+                } 
+            }); 
+        } 
     </script>
 </body>
 </html>
