@@ -315,7 +315,7 @@
                                 <th class="px-4 py-3 border text-center" width="30%">วันที่ลางาน</th>
                                 <th class="px-4 py-3 border text-center" width="20%">ประเภทการลา</th>
                                 <th class="px-4 py-3 border text-center" width="15%">จำนวนวัน</th>
-                                <th class="px-4 py-3 border text-center" width="35%">ผู้ปฏิบัติแทน / เหตุผลการลา</th>
+                                <th class="px-4 py-3 border text-center" width="35%">ผู้ปฏิบัติงานแทน / เหตุผลการลา</th>
                             </tr>
                         </thead>
                         <tbody id="printSingleRowBody"></tbody>
@@ -537,29 +537,36 @@
                 tbody.innerHTML = html; 
             }); 
         } 
+        // 🎯 แก้ไขฟังก์ชันพิมพ์จากหน้าประวัติรวม
+        function printFromHistory(index, buttonElement) {
+            const item = localHistoryList[index];
+            if (!item) return;
 
-        function printFromHistory(index, buttonElement) { 
-            const item = localHistoryList[index]; 
-            if (!item) return; 
+            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            // ตั้งค่าข้อมูลพนักงานและวันที่หัวเอกสารพิมพ์
+            document.getElementById('printEmpName').innerText = item.name;
+            document.getElementById('printDate').innerText = today;
+            document.getElementById('printReportTitle').innerText = "ใบขออนุมัติลางาน";
 
-            const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }); 
-             
-            document.getElementById('printEmpName').innerText = item.name; 
-            document.getElementById('printDate').innerText = today; 
-            document.getElementById('printReportTitle').innerText = "ใบขออนุมัติลางาน"; 
+            // ตรวจสอบค่าเหตุผลการลา (ถ้า item.reason ไม่มี ให้ลองหาจาก item.details หรือพิมพ์เครื่องหมายขีด)
+            const leaveReason = item.reason || item.details || '-';
 
-            const singleRowHtml = ` 
-                <tr> 
-                    <td class="px-4 py-3 border text-center font-medium">${item.date}</td> 
-                    <td class="px-4 py-3 border text-center text-indigo-700 font-semibold">${item.type}</td> 
-                    <td class="px-4 py-3 border text-center">${item.days} วัน</td> 
-                    <td class="px-4 py-3 border text-left text-gray-700">ได้รับอนุมัติในระบบเรียบร้อยแล้ว</td> 
-                </tr> 
-            `; 
-             
-            document.getElementById('printSingleRowBody').innerHTML = singleRowHtml; 
-            window.print(); 
-        } 
+            // 🎯 เขียน HTML ตารางแบบแถวเดี่ยว
+            const singleRowHtml = `
+                <tr>
+                    <td class="px-4 py-3 border text-center font-medium">${item.date}</td>
+                    <td class="px-4 py-3 border text-center text-indigo-700 font-semibold">${item.type}</td>
+                    <td class="px-4 py-3 border text-center">${item.days} วัน</td>
+                    <td class="px-4 py-3 border text-left text-gray-700">${leaveReason}</td>
+                </tr>
+            `;
+            
+            document.getElementById('printSingleRowBody').innerHTML = singleRowHtml;
+            
+            // สั่งพิมพ์หน้าต่างขึ้นมาทันที
+            window.print();
+        }
 
         function populateDataToDOM(name, data) { 
             const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }); 
